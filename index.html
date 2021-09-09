@@ -6,37 +6,80 @@
     <title>1주차 웹서버 구축</title>
 </head>
 <body>
-    <input id="idValue" type="text">
-    <input id="pwValue" type="text">
-    <input type="button" value="로그인" onclick="loginEvent()">
-    <h1>hello stageus !</h1>
+    <h1 id="welcomeTitle">로그인 하세요</h1>
+    <input id="loginBtn" type="button" value="로그인" onclick="loginPageEvent()">
+    <input id="logoutBtn" type="button" value="로그아웃" onclick="logout()">
+    <input type="button" value="회원가입" onclick="createaccountPageEvent()">
 </body>
 <script>
-    function loginEvent(){
-        const id = document.getElementById("idValue").value;
-        const pw = document.getElementById("pwValue").value;
+    const welcomeTitle = document.getElementById("welcomeTitle");
+    
+    window.onload = ()=>{
+        document.getElementById("logoutBtn").style.display = "none";
+        getCookie();
+    }
 
-        // axios로 하는 방법도 있지만, javascript 외장 라이브러리
-        // fetch는 javascript 내장 라이브러리
-        fetch("/login", {
-            "method": "POST", 
-            "headers": {
-                "Content-Type": "application/json"
-            },
-            "body": JSON.stringify ({
-                "id": id,
-                "pw": pw
-            })
-        })
+    function createaccountPageEvent(){
+        location.href = "createaccount";
+    }
+
+    function loginPageEvent(){
+        location.href = "login";
+    }
+
+    function getCookie(){
+        fetch('/cookie')
         .then(response => response.json())
-        .then(result => {
-            if(result.success == true){
-                alert("로그인 성공");
-            }
-            else{
-                alert("로그인 정보가 이상함!");
-            }
-        })
+        .then(result =>{
+            console.log(result);
+            login(result.id);
+        });
+    }
+
+    function login(cookieId){
+        console.log("아이디 : " + cookieId);
+        if(cookieId == null){
+            console.log('쿠키 없음');
+        }
+        else{
+            fetch("/autoLogin", {
+                "method": "POST", 
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": JSON.stringify ({
+                    "id": cookieId,
+                })
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log(result);
+                if(result.success == true){
+                    welcomeTitle.innerHTML = "ID : " + cookieId;
+                    changeLoginBtn();
+                }
+                else{
+                    console.log("로그인 실패");
+                }
+            })
+        }
+    }
+
+    function changeLoginBtn(){
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        loginBtn.style.display = "none";
+        logoutBtn.style.display = "inline";
+    }
+
+    function logout(){
+        fetch("/cookie", {
+                "method": "DELETE"})
+            .then(result => {
+                console.log(result);
+            })
+        location.reload();
     }
 </script>
 </html>
