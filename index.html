@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1주차 웹서버 구축</title>
+</head>
+<body>
+    <input id="idValue" type="text">
+    <input id="pwValue" type="text">
+    <input type="button" value="로그인" onclick="loginEvent()">
+    <h1>hello stageus !</h1>
+</body>
+<script>
+    function loginEvent(){
+        const id = document.getElementById("idValue").value;
+        const pw = document.getElementById("pwValue").value;
+
+        // axios로 하는 방법도 있지만, javascript 외장 라이브러리
+        // fetch는 javascript 내장 라이브러리
+        fetch("/login", {
+            "method": "POST", 
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": JSON.stringify ({
+                "id": id,
+                "pw": pw
+            })
+        })
+        .then(response => response.json())
+        .then(result => {
+            if(result.success == true){
+                alert("로그인 성공");
+            }
+            else{
+                alert("로그인 정보가 이상함!");
+            }
+        })
+    }
+</script>
+</html>

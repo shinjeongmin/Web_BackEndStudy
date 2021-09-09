@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1주차 웹서버 구축</title>
+</head>
+<body>
+    <h1>Login !</h1>
+    <input id="idValue" type="text"> <br>
+    <input id="pwValue" type="password"> <br>
+    <input type="button" value="로그인" onclick="loginEvent()"> <br>
+    <input type="button" value="돌아가기" onclick="mainPageEvent()">
+    <input type="button" value="회원가입" onclick="createaccountPageEvent()">
+</body>
+<script>
+    function createaccountPageEvent(){
+        location.href = "createaccount";
+    }
+
+    function mainPageEvent(){
+        location.href = "main";
+    }
+
+    function checkInputNotEmpty(id,pw){
+        if(id == ""){
+            alert("아이디를 입력해주세요.");
+        }
+        else if(pw == ""){
+            alert("비밀번호를 입력해주세요.");
+        }
+        else{
+            return true;
+        }
+        return false;
+    }
+
+    function loginEvent(){
+        const id = document.getElementById("idValue").value;
+        const pw = document.getElementById("pwValue").value;
+
+        if(checkInputNotEmpty(id,pw) == false) return;
+
+        // axios로 하는 방법도 있지만, javascript 외장 라이브러리
+        // fetch는 javascript 내장 라이브러리
+        fetch("/login", {
+            "method": "POST", 
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": JSON.stringify ({
+                "id": id,
+                "pw": pw,
+            })
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log(result);
+            if(result.success == true){
+                alert("로그인 성공");
+                getCookieEvent(id);
+                mainPageEvent();
+            }
+            else{
+                alert("로그인 정보가 이상함!");
+            }
+        })
+    }
+
+    function getCookieEvent(userid){
+        fetch('/cookie', {
+            "method": "POST", 
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": JSON.stringify({
+                "id":userid,
+            })
+        })
+        .then(result => {
+            console.log(result);
+        })
+    }
+</script>
+</html>

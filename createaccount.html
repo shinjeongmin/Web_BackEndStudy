@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+</head>
+<body>
+    <h1>Create Account</h1>
+    id : <input id="idValue" type="text"> <br>
+    pw : <input id="pwValue" type="password"> <br>
+    name : <input id="nameValue" type="text"> <br>
+    phoneNum : <input id="phoneNumValue" type="tel"> <br>
+    address : <input id="addressValue" type="text"> <br>
+    <input type="button" value="회원가입" onclick="signUpEvent()"> <br>
+    <input type="button" value="돌아가기" onclick="mainPageEvent()">
+</body>
+<script>
+    function signUpEvent(){
+        const id = document.getElementById("idValue").value;
+        const pw = document.getElementById("pwValue").value;
+        const name = document.getElementById("nameValue").value;
+        const phoneNum = document.getElementById("phoneNumValue").value;
+        const address = document.getElementById("addressValue").value;
+        if(checkInputNotEmpty(id,pw,name,phoneNum,address) == false) return;
+
+        fetch("/createaccount", {
+            "method": "POST", 
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": JSON.stringify ({
+                "id": id,
+                "pw": pw,
+                "name" : name,
+                "phoneNum" : phoneNum,
+                "address" : address,
+            })
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log(result);
+            if(result.success == true){
+                alert("회원가입 성공\n로그인 하세요");
+                loginPageEvent();
+            }
+            else{
+                alert("회원가입 실패 : 중복된 아이디가 있습니다");
+            }
+        })
+    }
+
+    function mainPageEvent(){
+        location.href = "main";
+    }
+    function loginPageEvent(){
+        location.href = "login";
+    }
+
+    function checkInputNotEmpty(id, pw, name, phoneNum, address){
+
+        if(id == ""){
+            alert("아이디를 입력해주세요");
+        }
+        else if(pw == ""){
+            alert("비밀번호를 입력해주세요.");
+        }
+        else if(name == ""){
+            alert("이름을 입력해주세요.");
+        }
+        else if(phoneNum == ""){
+            alert("전화번호를 입력해주세요.");
+        }
+        else if(address == ""){
+            alert("주소를 입력해주세요.");
+        }
+        else{
+            return true;
+        }
+        return false;
+    }
+</script>
+</html>
