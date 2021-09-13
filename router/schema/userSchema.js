@@ -4,6 +4,6 @@ const mongoose = require("mongoose");
 const userSchema = mongoose.Schema({
     id: "string",
     pw: "string",
-})
+});
 
 module.exports = mongoose.model("userSchema", userSchema); // mongoose 전용 export 형태

@@ -19,7 +19,7 @@ app.use(cookieParser('abcdef'));
 
 app.get("*", (req,res, next) =>{
     const protocol = req.protocol;
-    console.log(protocol);
+    // console.log(protocol);
 
     if(protocol == "https"){
         next(); // 아래 위치한 API들로 넘어갈 수 있도록 해줌.
@@ -43,6 +43,9 @@ app.use("/createAccount", createAccount);
 
 const cookie = require("./router/cookie.js");
 app.use('/cookie', cookie);
+
+// const createAccount_mongo = require("./router/createAccount_mongo.js");
+// app.use("/createAccount_mongo", createAccount_mongo);
 
 // listen은 서버를 여는 동작이므로 가장 마지막에 실행
 // listen의 매개변수 (httpPort, method(request, response))

@@ -42,7 +42,7 @@ router.post("/", (req, response) => {
     });
 });
 
-router.post("/auto", (req,response) => {
+router.post("/hasCookie", (req,response) => {
     const reqId = req.body.id;
 
     const result = {
