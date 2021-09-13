@@ -32,19 +32,19 @@ router.post("/", (req, response) => {
         console.log(res.rows);
 
         if(res.rows.length == 0){
-            client.query('INSERT INTO stageus.user(id, pw, name, phonenumber, address) values('+
-            '\'' + reqId + '\'' + ', ' +
-            '\'' + reqPassword + '\'' + ', ' +
-            '\'' + reqName + '\'' + ', ' +
-            '\'' + reqPhoneNum + '\'' + ', ' +
-            '\'' + reqAddress + '\'' + ') returning *', (err,res) =>{
-                console.log('회원가입 성공')
-                result.success = true;
-                response.send(result);
-            })
+            client.query(
+                'INSERT INTO stageus.user(id, pw, name, phonenumber, address) values(?,?,?,?,?)',
+                reqId, reqPassword, reqName, reqPhoneNum, reqAddress,
+                (err, res) => {
+                    // insert success
+                    result.success = true;
+                    response.send(result);
+                })
         }
         else{
+            // insert fail
             console.log("이미 존재하는 id");
+            console.log(err);
             response.send(result);
         }
     });

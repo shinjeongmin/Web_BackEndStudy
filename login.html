@@ -11,11 +11,11 @@
     <input id="pwValue" type="password"> <br>
     <input type="button" value="로그인" onclick="loginEvent()"> <br>
     <input type="button" value="돌아가기" onclick="mainPageEvent()">
-    <input type="button" value="회원가입" onclick="createaccountPageEvent()">
+    <input type="button" value="회원가입" onclick="createAccountPageEvent()">
 </body>
 <script>
-    function createaccountPageEvent(){
-        location.href = "createaccount";
+    function createAccountPageEvent(){
+        location.href = "createAccount";
     }
 
     function mainPageEvent(){
@@ -43,7 +43,7 @@
 
         // axios로 하는 방법도 있지만, javascript 외장 라이브러리
         // fetch는 javascript 내장 라이브러리
-        fetch("/signUp_mongo", {
+        fetch("/login", {
             "method": "POST", 
             "headers": {
                 "Content-Type": "application/json"

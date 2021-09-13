@@ -9,7 +9,7 @@
     <h1 id="welcomeTitle">로그인 하세요</h1>
     <input id="loginBtn" type="button" value="로그인" onclick="loginPageEvent()">
     <input id="logoutBtn" type="button" value="로그아웃" onclick="logout()">
-    <input type="button" value="회원가입" onclick="createaccountPageEvent()">
+    <input type="button" value="회원가입" onclick="createAccountPageEvent()">
 </body>
 <script>
     const welcomeTitle = document.getElementById("welcomeTitle");
@@ -19,8 +19,8 @@
         getCookie();
     }
 
-    function createaccountPageEvent(){
-        location.href = "createaccount";
+    function createAccountPageEvent(){
+        location.href = "createAccount";
     }
 
     function loginPageEvent(){
@@ -39,7 +39,7 @@
     function login(cookieId){
         console.log("아이디 : " + cookieId);
         if(cookieId == null){
-            console.log('쿠키 없음');
+            loginPageEvent();
         }
         else{
             fetch("/autoLogin", {
