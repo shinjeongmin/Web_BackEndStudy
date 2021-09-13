@@ -1,49 +1,68 @@
 const express = require("express");
 const router = express.Router(); 
 const path = require("path");
-const {Client} = require('pg');
 const cookieParser = require('cookie-parser');
+const client = require('./connectClient_pg');
 
 router.get("/", (req,res) => {
     res.sendFile(path.join(__dirname, "../login.html")); // __dirname 현재 파일 경로
 });
-
-const client = new Client({
-    user: 'user1',
-    host: 'localhost',
-    database: 'week1',
-    password: '1234',
-    port: 5432,
-});
-
-client.connect();
 
 router.post("/", (req, response) => {
     const reqId = req.body.id;
     const reqPassword = req.body.pw;
 
     const result = {
-        "success" : false
+        "success" : false,
+        "description" : "",
     };
 
-    client.query('SELECT * from stageus.user where id=\'' + reqId + '\'', (err, res) => {
+    client.query('SELECT * from stageus.user where id=$1', [reqId]) 
+    .then(res => {
         console.log(res.rows);
 
         if(res.rows.length == 0){
-            console.log("없는 id");
+            result.description = "일치하는 id가 존재하지 않습니다";
         }
         else{
             // check pass word
             if(res.rows[0].pw == reqPassword){
-                console.log('로그인 성공');
                 result.success = true;
-                // response.cookie('userid', reqId);
             }
             else{
-                console.log('잘못된 pw');
+                result.description = "비밀번호가 잘못되었습니다";
             }
         }
+        response.send(result);
+    })
+    .catch(e=>{
+        // select error
+        result.description = "정보 입력에 오류가 발생했습니다";
+        response.send(result);
+    });
+});
 
+router.post("/auto", (req,response) => {
+    const reqId = req.body.id;
+
+    const result = {
+        "success" : false,
+        "description" : "",
+    };
+
+    client.query('SELECT * from stageus.user where id=$1', [reqId])
+    .then(res => {
+        if(res.rows.length == 0){
+            result.description = "일치하는 id가 존재하지 않습니다";
+        }
+        else{
+            result.success = true;
+        }
+        response.send(result);
+    })
+    .catch(e => {
+        // select error
+        result.description = "정보 입력에 오류가 발생했습니다";
         response.send(result);
     });
 });

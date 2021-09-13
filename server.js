@@ -38,17 +38,11 @@ app.use("/main", main);
 const login = require("./router/login.js");
 app.use("/login", login);
 
-const autoLogin = require("./router/autoLogin.js");
-app.use("/autoLogin", autoLogin);
-
 const createAccount = require("./router/createAccount.js");
 app.use("/createAccount", createAccount);
 
 const cookie = require("./router/cookie.js");
 app.use('/cookie', cookie);
-
-// const signUp_mongo = require("./router/signUp_mongo.js");
-// app.use("/signUp_mongo", signUp_mongo);
 
 // listen은 서버를 여는 동작이므로 가장 마지막에 실행
 // listen의 매개변수 (httpPort, method(request, response))

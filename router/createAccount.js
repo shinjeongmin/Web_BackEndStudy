@@ -1,21 +1,11 @@
 const express = require("express");
 const router = express.Router(); 
 const path = require("path");
-const {Client} = require('pg');
+const client = require("./connectClient_pg");
 
 router.get("/", (req,res) => {
     res.sendFile(path.join(__dirname, "../createaccount.html"));
 });
-
-const client = new Client({
-    user: 'user1',
-    host: 'localhost',
-    database: 'week1',
-    password: '1234',
-    port: 5432,
-});
-
-client.connect();
 
 router.post("/", (req, response) => {
     const reqId = req.body.id;
@@ -25,28 +15,38 @@ router.post("/", (req, response) => {
     const reqAddress = req.body.address;
 
     const result = {
-        "success" : false
+        "success" : false,
+        "description" : "",
     };
 
-    client.query('SELECT * from stageus.user where id=\'' + reqId + '\'', (err, res) => {
-        console.log(res.rows);
-
+    client.query('SELECT * from stageus.user where id=\'' + reqId + '\'')
+    .then(res => {
         if(res.rows.length == 0){
-            client.query(
-                'INSERT INTO stageus.user(id, pw, name, phonenumber, address) values(?,?,?,?,?)',
-                reqId, reqPassword, reqName, reqPhoneNum, reqAddress,
-                (err, res) => {
+            client.query('INSERT INTO stageus.user(id, pw, name, phonenumber, address) values($1,$2,$3,$4,$5)',
+                [reqId, reqPassword, reqName, reqPhoneNum, reqAddress])
+                .then((err, res) => {
                     // insert success
                     result.success = true;
                     response.send(result);
                 })
+                .catch((err) => {
+                    // insert error
+                    console.log("error code : " + err.code + " -- insert value violates constraint error");
+                    result.description = "전화번호 형식을 010-0000-0000의 형태로 입력하세요";
+                    response.send(result);
+                });
         }
         else{
-            // insert fail
-            console.log("이미 존재하는 id");
-            console.log(err);
+            // already exist id
+            result.description = "이미 존재하는 id입니다";
             response.send(result);
         }
+    })
+    .catch(e=>{
+        // select error
+        console.log(e);
+        result.description = "정보 입력에 오류가 발생했습니다";
+        response.send(result);
     });
 
     ///
