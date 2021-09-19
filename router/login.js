@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router(); 
 const path = require("path");
 const cookieParser = require('cookie-parser');
-const client = require('./connectClient_pg');
+const dao = require('./DAO/select');
 
 router.get("/", (req,res) => {
     res.sendFile(path.join(__dirname, "../login.html")); // __dirname 현재 파일 경로
@@ -17,25 +17,25 @@ router.post("/", (req, response) => {
         "description" : "",
     };
 
-    client.query('SELECT * from stageus.user where id=$1', [reqId]) 
+    dao.selectFromUserDB(reqId)
     .then(res => {
         console.log(res.rows);
 
-        if(res.rows.length == 0){
+        if (res.rows.length == 0) {
             result.description = "일치하는 id가 존재하지 않습니다";
         }
-        else{
+        else {
             // check pass word
-            if(res.rows[0].pw == reqPassword){
+            if (res.rows[0].pw == reqPassword) {
                 result.success = true;
             }
-            else{
+            else {
                 result.description = "비밀번호가 잘못되었습니다";
             }
         }
         response.send(result);
     })
-    .catch(e=>{
+    .catch(e => {
         // select error
         result.description = "정보 입력에 오류가 발생했습니다";
         response.send(result);
@@ -50,12 +50,12 @@ router.post("/hasCookie", (req,response) => {
         "description" : "",
     };
 
-    client.query('SELECT * from stageus.user where id=$1', [reqId])
+    dao.selectFromUserDB(reqId)
     .then(res => {
-        if(res.rows.length == 0){
+        if (res.rows.length == 0) {
             result.description = "일치하는 id가 존재하지 않습니다";
         }
-        else{
+        else {
             result.success = true;
         }
         response.send(result);
