@@ -47,6 +47,22 @@ app.use('/cookie', cookie);
 // const createAccount_mongo = require("./router/createAccount_mongo.js");
 // app.use("/createAccount_mongo", createAccount_mongo);
 
+/*
+function connect() {
+    mongoose.connect('mongodb+srv://userShin:userpassword1234@cluster0.lr8si.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+        , function (err) {
+            if (err) {
+                console.error('mongodb connection error', err);
+            }
+            console.log('mongodb connected');
+        });
+}
+connect();
+mongoose.connection.on('disconnected', connect);
+require('./router/schema/userSchema');
+*/
+
+
 // listen은 서버를 여는 동작이므로 가장 마지막에 실행
 // listen의 매개변수 (httpPort, method(request, response))
 app.listen(httpPort, (req, res) => {

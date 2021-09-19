@@ -8,9 +8,8 @@ router.post("/", (req,res) => {
         success : false,
     }
 
-    mongoose.connect(
-        "mongodb+srv://userShin:userpassword1234@cluster0.lr8si.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-        {
+    mongoose.connect("mongodb+srv://userShin:userpassword1234@cluster0.lr8si.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useCreateIndex: true,
@@ -39,3 +38,4 @@ router.post("/", (req,res) => {
     })
 })
 
+module.exports = router;
