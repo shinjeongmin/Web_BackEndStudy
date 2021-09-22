@@ -44,6 +44,9 @@ app.use("/createAccount", createAccount);
 const cookie = require("./router/cookie.js");
 app.use('/cookie', cookie);
 
+const test = require("./router/postgres_db_backup");
+test.postgresDbBackup();
+
 // const createAccount_mongo = require("./router/createAccount_mongo.js");
 // app.use("/createAccount_mongo", createAccount_mongo);
 
