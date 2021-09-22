@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router(); 
-const client = require('./connectClient_pg');
+const client = require('../connectClient_pg');
 
 module.exports.selectFromUserDB = id => {
     client.query('SELECT * from stageus.user where id=$1', [id]);

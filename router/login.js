@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router(); 
 const path = require("path");
 const cookieParser = require('cookie-parser');
-const dao = require('./DAO/select');
+const dao = require('./DAO/dao');
 
 router.get("/", (req,res) => {
     res.sendFile(path.join(__dirname, "../login.html")); // __dirname 현재 파일 경로
