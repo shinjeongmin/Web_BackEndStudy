@@ -8,6 +8,8 @@ const client_id = configNaver.clientId;
 const client_secret = configNaver.clientSecret;
 const state = "1234";
 const redirectURI = encodeURI(configNaver.callbackURL);
+
+// token을 클라이언트에게 어떻게 전달하는가?
 const token = {
     access_token : "",
     refresh_token : "",
