@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>naver callback</title>
+</head>
+<body>
+    <h1>Naver 로그인 성공</h1>
+    <input type="button" onclick="naverLogOut()" value="로그아웃">
+    <input type="button" onclick="openToken()" value="토큰 뜯기">
+    <h2 id="content"></h2>
+    <h2 id="content_token"></h2>
+</body>
+<script>
+    const content = document.getElementById("content");
+    const contentToken = document.getElementById("content_token");
+
+    const naverMenber = () =>{
+        fetch('/naver/member',{
+            "method": "POST", 
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": JSON.stringify({
+            })
+        })
+        .then(response => response.json())
+        .then((res)=>{
+            console.log(res);
+            content.innerHTML = "사용자명 : " + res.response.name;
+        });
+    }
+
+    const naverLogOut = () =>{
+        fetch('/naver/logout')
+        .then(response => response.json())
+        .then((res)=>{
+            console.log(res);
+        });
+
+        location.href = "../login";
+    }
+ 
+    const openToken = () =>{
+        
+    }
+
+    naverMenber();
+</script>
+</html>

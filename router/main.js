@@ -6,5 +6,9 @@ router.get("/", (req,res) => {
     res.sendFile(path.join(__dirname, "../index.html")); // __dirname 현재 파일 경로
 });
 
+router.get("/week4", (req,res) =>{
+    res.sendFile(path.join(__dirname, "../week4.html"));
+});
+
 // 모듈로써 내보내는 코드
 module.exports = router;

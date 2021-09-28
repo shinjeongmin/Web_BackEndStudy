@@ -44,12 +44,20 @@ app.use("/createAccount", createAccount);
 const cookie = require("./router/cookie.js");
 app.use('/cookie', cookie);
 
+const token = require('./router/token');
+app.use("/token", token);
+
 // bash script execute router test
 // const test = require("./router/postgres_db_backup");
 // test.postgresDbBackup();
 
 // const createAccount_mongo = require("./router/createAccount_mongo.js");
 // app.use("/createAccount_mongo", createAccount_mongo);
+
+// --- Oauth ---
+
+const naverCallback = require("./router/naverLogin.js");
+app.use("/naver", naverCallback);
 
 // listen은 서버를 여는 동작이므로 가장 마지막에 실행
 // listen의 매개변수 (httpPort, method(request, response))

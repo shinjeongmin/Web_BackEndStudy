@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>1주차 웹서버 구축</title>
+    <script type="text/javascript" src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js" charset="utf-8"></script>
 </head>
 <body>
     <h1>Login !</h1>
     <input id="idValue" type="text"> <br>
     <input id="pwValue" type="password"> <br>
-    <input type="button" value="로그인" onclick="loginEvent()"> <br>
+    <input type="button" value="로그인" onclick="loginEvent()"> 
+    <input type="button" value="naver 로그인" onclick="naverLogin()"> 
+    <div id="naverIdLogin"></div>
+    <br>
     <input type="button" value="돌아가기" onclick="mainPageEvent()">
     <input type="button" value="회원가입" onclick="createAccountPageEvent()">
 </body>
@@ -81,5 +85,23 @@
             console.log(result);
         })
     }
+
+    // const naverLoginTest = new naver.LoginWithNaverId(
+    //     {
+    //         clientId: "xDicgD3h9hY3CLwziqVn",
+    //         callbackUrl:"https://13.209.77.211:4000/naver/callback",
+    //         isPopup: false,
+    //         loginButton: {color:"green", type:3, height:40}
+    //     }
+    // );
+    // naverLoginTest.init();
+
+    const naverLogin = () =>{
+        fetch('/naver/login')
+        .then(response => response.json())
+        .then(result => {
+            location.href = result.api_url;
+        });
+    };
 </script>
 </html>
