@@ -22,8 +22,8 @@ router.get("/", (req,res) => {
 });
 
 router.get("/login", (req, res)=>{
-    const api_url = 'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=' + client_id 
-    + '&redirect_uri=' + redirectURI + '&state=' + state;
+    const api_url = 'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=' +client_id
+    + '&redirect_uri='+ redirectURI + '&state=' + state;
     
     const result = {api_url : api_url,}
     res.send(result);
@@ -69,9 +69,8 @@ router.get("/callback", (req,res)=>{
             token.token_type = JSON.parse(body).token_type;
             token.expires_in = JSON.parse(body).expires_in;
             
-            // token을 프론트로 보내고 프론트에서 정상적으로 token을 받았다면 
-            // 페이지 요청 router를 별도로 호출하도록 해야함
-            res.sendFile(path.join(__dirname, "../naverCallback.html")); // __dirname 현재 파일 경로
+            res.end(body);
+            // res.sendFile(path.join(__dirname, "../naverCallback.html")); // __dirname 현재 파일 경로
         } else {
             res.status(response.statusCode).end();
             console.log('error = ' + response.statusCode);

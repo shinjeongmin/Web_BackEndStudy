@@ -59,6 +59,13 @@ app.use("/token", token);
 const naverCallback = require("./router/naverLogin.js");
 app.use("/naver", naverCallback);
 
+const kakaoCallback = require("./router/kakaoLogin.js");
+app.use("/kakao", kakaoCallback);
+
+// --- redis ---
+const numberSet = require("./router/numberSet.js");
+app.use("/numberSet", numberSet);
+
 // listen은 서버를 여는 동작이므로 가장 마지막에 실행
 // listen의 매개변수 (httpPort, method(request, response))
 app.listen(httpPort, (req, res) => {

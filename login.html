@@ -16,6 +16,10 @@
     <br>
     <input type="button" value="돌아가기" onclick="mainPageEvent()">
     <input type="button" value="회원가입" onclick="createAccountPageEvent()">
+    <br><br>
+    <input type="button" value="증가" onclick="addNumber()">
+    <input type="button" value="감소" onclick="subNumber()">
+    <div id="resultBox"></div>
 </body>
 <script>
     function createAccountPageEvent(){
@@ -103,5 +107,32 @@
             location.href = result.api_url;
         });
     };
+
+    const addNumber  = () => {
+        fetch("/numberSet/increase", {
+                "method": "POST", 
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": JSON.stringify ({
+                    "key" : "number",
+                })
+            })
+            .then((response) => response.json())
+            .then((result) => {
+                console.log(result.resultNum);
+                document.getElementById("resultBox").innerHTML = result.resultNum;
+            })
+    }
+    const subNumber = () =>{
+        fetch("/numberSet/decrease", {
+                "method": "POST", 
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": JSON.stringify ({
+                })
+            })
+    }
 </script>
 </html>
