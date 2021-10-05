@@ -17,10 +17,6 @@ const token = {
     expires_in : "",
 }
 
-router.get("/", (req,res) => {
-    res.sendFile(path.join(__dirname, "../login.html")); // __dirname 현재 파일 경로
-});
-
 router.get("/login", (req, res)=>{
     const api_url = 'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=' + client_id 
     + '&redirect_uri=' + redirectURI + '&state=' + state;
@@ -93,10 +89,9 @@ router.post('/member', (req, res)=>{
             res.writeHead(200, {'Content-Type': 'text/json;charset=utf-8'});
             res.end(body);
         } else {
-            console.log('error');
             if(response != null) {
                 res.status(response.statusCode).end();
-                console.log('error = ' + response.statusCode);
+                console.log('error = ' + response.statusCode + " \n can't get member info");
             }
         }
     })
