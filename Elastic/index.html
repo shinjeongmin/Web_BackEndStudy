@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="button" value="연결 상태 확인" onclick="elasticStatusEvent()">
+    <br>
+    <input type="text" id="name">
+    <input type="button" value="이름 삽입" onclick="elasticInsertEvent()">
+    <br>
+    <input type="text" id="name2">
+    <input type="button" value="검색" onclick="elasticReadEvent()">
+    <br>
+    <input type="text" id="name3">
+    <input type="button" value="삭제" onclick="elasticDeleteEvent()">
+    <br><br>
+    <h1>자동완성 검색창</h1>
+    <input type="text" id="autocomplete" onchange="elasticAutoCompleteEvent()">
+    <div id="autocompletePanel"></div>
+</body>
+<script>
+    const elasticStatusEvent = () =>{
+        fetch("elastic/status", {
+            method: "GET"
+        })
+        .then(res => res.json())
+        .then(result =>{
+            console.log(result.status);
+        });
+    } // result : JSON (key : status)
+
+    const elasticInsertEvent = () =>{
+        const name = document.getElementById("name").value;
+
+        fetch("elastic/insert", {
+            method: "POST",
+            headers: {
+                "Content-Type" : "application/json"
+            },
+            body: JSON.stringify({
+                "name" : name,
+            })
+        })
+        .then(res => res.json())
+        .then(result =>{
+            if(result.success) console.log("success insert");
+            else console.log("fail insert");
+        });
+    } // result : bool
+
+    const elasticReadEvent = () =>{
+        const name = document.getElementById("name2").value;
+
+        fetch("elastic/read", {
+            method: "POST",
+            headers: {
+                "Content-Type" : "application/json"
+            },
+            body: JSON.stringify({
+                "name" : name,
+            })
+        })
+        .then(res => res.json())
+        .then(result =>{
+            if(result) console.log(result.data);
+            else console.log("fail read");
+        });
+    } // result : bool
+
+    const elasticDeleteEvent = () =>{
+        const name = document.getElementById("name3").value;
+
+        fetch("elastic/delete", {
+            method: "DELETE",
+            headers: {
+                "Content-Type" : "application/json"
+            },
+            body: JSON.stringify({
+                "name" : name,
+            })
+        })
+        .then(res => res.json())
+        .then(result =>{
+            if(result.success) console.log("success delete");
+            else console.log("fail delete");
+        });
+    } // result : bool
+
+    const elasticAutoCompleteEvent = () =>{
+        const name = document.getElementById("autocomplete").value;
+
+        fetch("elastic/autocomplete", {
+            method: "POST",
+            headers: {
+                "Content-Type" : "application/json"
+            },
+            body: JSON.stringify({
+                "name" : name,
+            })
+        })
+        .then(res => res.json())
+        .then(result =>{
+            if(result) {
+                console.log(result.data);
+                createBlocks(result.data, 4);
+            }
+            else console.log("fail read");
+        });
+    }
+
+    const createBlocks = (wordArr, showCnt) =>{
+        const panel = document.getElementById("autocompletePanel");
+        panel.innerHTML = '';
+        if(wordArr.length == 0) return;
+
+        wordArr.forEach((element, index) => {
+            if(index >= showCnt) return false;
+            const newEle = document.createElement("p");
+            newEle.appendChild(document.createTextNode(element));
+            panel.appendChild(newEle);
+        });
+    }
+</script>
+</html>

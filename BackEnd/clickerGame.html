@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>clicker game</title>
+</head>
+<body>
+    <h2>레벨 : <a id="level"></a></h2> 
+    <br>
+    <h2>경험치 : <a id="experience"></a></h2>
+    <br>  
+    <h2>공격력 : <a id="attack"></a></h2>
+    <br>
+    <h2>골드 : <a id="gold"></a></h2>
+    <br>
+    <!-- <input type="button" onclick="startGame()" value="게임시작"> -->
+    <input type="button" onclick="hunting('testplayer')" value="사냥하기">
+    <input type="button" onclick="buyItem('testplayer')" value="아이템 구입하기">
+    <input type="button" onclick="getPlayerInfo('testplayer')" value="정보가져와">
+</body>
+<script>
+    const level = document.getElementById("level");
+    const experience = document.getElementById("experience");
+    const attack = document.getElementById("attack");
+    const gold = document.getElementById("gold");
+ 
+    const setPlayerInfoView = (obj) => {
+        level.innerHTML = obj.level;
+        experience.innerHTML = obj.experience;
+        attack.innerHTML = obj.attack;
+        gold.innerHTML = obj.gold;
+    }
+
+    const startGame = () => {
+        console.log('아직');
+        return;
+        fetch("/clickerGame/getPlayerInfo")
+            .then((response) => response.json())
+            .then((result) => {
+                console.log(result.message);
+            })
+            .catch((e)=>{
+                console.log(e);
+                console.log("불러오기 실패");
+            })
+    }
+
+    const getPlayerInfo = (name) => {
+        fetch("/clickerGame/getPlayerInfo", {
+                "method": "POST", 
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": JSON.stringify ({
+                    "playerInfo" : {
+                        "name" : name,
+                        "keyLevel" : "level",
+                        "keyExperience" : "experience",
+                        "keyAttack" : "attack",
+                        "keyGold" : "gold",
+                        // 레벨, 경험치, 공격력, 골드 
+                    }
+                })
+            })
+            .then((response) => response.json())
+            .then((result) => {
+                console.log(result.message);
+                setPlayerInfoView(result);
+            })
+    }
+
+    const hunting = (name) => {
+        fetch("/clickerGame/hunting", {
+                "method": "POST", 
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": JSON.stringify ({
+                    "playerInfo" : {
+                        "name" : name,
+                        "keyLevel" : "level",
+                        "keyExperience" : "experience",
+                        "keyAttack" : "attack",
+                        "keyGold" : "gold",
+                        // 레벨, 경험치, 공격력, 골드 
+                    }
+                })
+            })
+            .then((response) => response.json())
+            .then((result) => {
+                console.log(result);
+                getPlayerInfo(name);
+            })
+    }
+
+    const buyItem = (name) => {
+        fetch("/clickerGame/buyItem", {
+                "method": "POST", 
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": JSON.stringify ({
+                    "playerInfo" : {
+                        "name" : name,
+                        "keyLevel" : "level",
+                        "keyExperience" : "experience",
+                        "keyAttack" : "attack",
+                        "keyGold" : "gold",
+                        // 레벨, 경험치, 공격력, 골드 
+                    }
+                })
+            })
+            .then((response) => response.json())
+            .then((result) => {
+                console.log(result);
+                if(result.alert){
+                    alert(result.message);
+                }
+                getPlayerInfo(name);
+            })
+    }
+</script>
+</html>
